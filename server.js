@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/generate', async (req, res) => {
-  const { product, category, langs, modules } = req.body;
+  const { product, category, langs, modules, keywords } = req.body;
 
   if (!product || !langs || langs.length === 0) {
     return res.status(400).json({ error: 'Produit et langues requis.' });
@@ -30,6 +30,7 @@ app.post('/generate', async (req, res) => {
   const prompt = `Tu es un expert en copywriting e-commerce et marketing digital.
 Produit : "${product}" — Catégorie : ${category}
 Langues : ${langList}
+${keywords ? `Mots clés et éléments IMPORTANTS à faire ressortir obligatoirement dans tout le contenu : ${keywords}` : ''}
 
 Génère le contenu suivant pour chaque langue.
 Réponds UNIQUEMENT en JSON valide, sans markdown ni backticks.

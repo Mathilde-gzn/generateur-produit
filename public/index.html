@@ -103,6 +103,9 @@
       </select>
     </div>
 
+    <p class="section-label">Mots clés / éléments importants à faire ressortir :</p>
+    <textarea id="keywords-input" placeholder="Ex: confort, légèreté, made in France, eco-friendly, résistant à l'eau..."></textarea>
+
     <p class="section-label">Modules à générer :</p>
     <div class="modules-row">
       <button class="module-btn active" data-module="fiche">📄 Fiche produit</button>
@@ -154,6 +157,7 @@
     if (activeModules.length === 0) { showError("Sélectionnez au moins un module."); return; }
 
     const category = document.getElementById('category-select').value;
+    const keywords = document.getElementById('keywords-input').value.trim();
     const btn      = document.getElementById('generate-btn');
     const bar      = document.getElementById('loading-bar');
     const inner    = document.getElementById('loading-inner');
@@ -177,6 +181,7 @@
         body: JSON.stringify({
           product,
           category,
+          keywords,
           langs: activeLangs,
           modules: activeModules
         })

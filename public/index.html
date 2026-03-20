@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Générateur de contenu produit</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f3;
+      color: #1a1a18;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .app { max-width: 820px; margin: 0 auto; }
+    .header { margin-bottom: 2rem; }
+    .header h1 { font-size: 24px; font-weight: 500; }
+    .header p { font-size: 14px; color: #666; margin-top: 4px; }
+    .input-section {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .input-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    input[type="text"], select {
+      flex: 1;
+      font-size: 15px;
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      background: #fff;
+      color: #1a1a18;
+      font-family: inherit;
+    }
+    input[type="text"]:focus, select:focus { border-color: #888; }
+    .section-label { font-size: 12px; color: #888; margin-bottom: 8px; }
+    .lang-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .lang-btn {
+      font-size: 13px; padding: 4px 12px; border-radius: 8px;
+      border: 1px solid #ccc; background: transparent; color: #888;
+      cursor: pointer; font-family: inherit; transition: all 0.15s;
+    }
+    .lang-btn.active { background: #e8f0fe; color: #1a56db; border-color: #93b4f5; }
+    .modules-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .module-btn {
+      font-size: 13px; padding: 6px 14px; border-radius: 8px;
+      border: 1px solid #ccc; background: transparent; color: #888;
+      cursor: pointer; font-family: inherit; transition: all 0.15s;
+    }
+    .module-btn.active { background: #f0fdf4; color: #16a34a; border-color: #86efac; }
+    .generate-btn {
+      width: 100%; padding: 10px; font-size: 15px; font-weight: 500;
+      border-radius: 8px; border: none; background: #1a1a18; color: #fff;
+      cursor: pointer; font-family: inherit; transition: opacity 0.15s;
+    }
+    .generate-btn:hover { opacity: 0.85; }
+    .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .loading-bar { height: 3px; border-radius: 2px; background: #eee; overflow: hidden; margin: 12px 0; display: none; }
+    .loading-bar.visible { display: block; }
+    .loading-bar-inner { height: 100%; width: 0%; background: #1a1a18; border-radius: 2px; transition: width 0.4s ease; }
+    .error-msg { font-size: 13px; color: #b91c1c; padding: 8px 12px; background: #fef2f2; border-radius: 8px; margin-top: 8px; display: none; }
+    .error-msg.visible { display: block; }
+    .results { display: none; margin-top: 1.5rem; }
+    .results.visible { display: block; }
+    .module-sections { display: flex; flex-direction: column; gap: 1.5rem; }
+    .module-title { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: #888; margin-bottom: 10px; }
+    .tabs { display: flex; gap: 4px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .tab { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: #888; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    .tab.active { background: #fff; color: #1a1a18; border-color: #aaa; font-weight: 500; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1.25rem; margin-bottom: 12px; }
+    .card-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: #888; margin-bottom: 8px; }
+    .card-text { font-size: 14px; color: #1a1a18; line-height: 1.7; white-space: pre-wrap; }
+    .copy-btn { margin-top: 10px; font-size: 12px; padding: 4px 10px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: #888; cursor: pointer; font-family: inherit; }
+    .copy-btn:hover { border-color: #aaa; color: #1a1a18; }
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .social-grid { grid-template-columns: 1fr; } }
+    .divider { border: none; border-top: 1px solid #eee; margin: 0.5rem 0 1rem; }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>Générateur de contenu produit</h1>
+    <p>Fiche produit · Réseaux sociaux · Email marketing · Multi-langues</p>
+  </div>
+
+  <div class="input-section">
+    <div class="input-row">
+      <input type="text" id="product-input" placeholder="Ex: Chaussures running légères" />
+      <select id="category-select">
+        <option value="general">Général</option>
+        <option value="mode">Mode / Vêtements</option>
+        <option value="sport">Sport</option>
+        <option value="cosmetique">Cosmétique</option>
+        <option value="tech">Technologie</option>
+        <option value="maison">Maison</option>
+      </select>
+    </div>
+
+    <p class="section-label">Modules à générer :</p>
+    <div class="modules-row">
+      <button class="module-btn active" data-module="fiche">📄 Fiche produit</button>
+      <button class="module-btn active" data-module="social">📱 Posts réseaux sociaux</button>
+      <button class="module-btn active" data-module="email">✉️ Email marketing</button>
+    </div>
+
+    <p class="section-label">Langues :</p>
+    <div class="lang-row">
+      <button class="lang-btn active" data-lang="fr">🇫🇷 Français</button>
+      <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+      <button class="lang-btn active" data-lang="de">🇩🇪 Deutsch</button>
+      <button class="lang-btn active" data-lang="es">🇪🇸 Español</button>
+    </div>
+
+    <button class="generate-btn" id="generate-btn" onclick="generate()">⚡ Générer tout le contenu</button>
+    <div class="loading-bar" id="loading-bar"><div class="loading-bar-inner" id="loading-inner"></div></div>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="module-sections" id="module-sections"></div>
+  </div>
+</div>
+
+<script>
+  const langMeta = {
+    fr: { label: "Français", flag: "🇫🇷" },
+    en: { label: "English",  flag: "🇬🇧" },
+    de: { label: "Deutsch",  flag: "🇩🇪" },
+    es: { label: "Español",  flag: "🇪🇸" }
+  };
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => btn.classList.toggle('active'));
+  });
+  document.querySelectorAll('.module-btn').forEach(btn => {
+    btn.addEventListener('click', () => btn.classList.toggle('active'));
+  });
+
+  async function generate() {
+    const product = document.getElementById('product-input').value.trim();
+    if (!product) { showError("Veuillez entrer un nom de produit."); return; }
+
+    const activeLangs   = [...document.querySelectorAll('.lang-btn.active')].map(b => b.dataset.lang);
+    const activeModules = [...document.querySelectorAll('.module-btn.active')].map(b => b.dataset.module);
+
+    if (activeLangs.length === 0)   { showError("Sélectionnez au moins une langue."); return; }
+    if (activeModules.length === 0) { showError("Sélectionnez au moins un module."); return; }
+
+    const category = document.getElementById('category-select').value;
+    const btn      = document.getElementById('generate-btn');
+    const bar      = document.getElementById('loading-bar');
+    const inner    = document.getElementById('loading-inner');
+
+    document.getElementById('error-msg').classList.remove('visible');
+    btn.disabled = true;
+    btn.textContent = 'Génération en cours...';
+    bar.classList.add('visible');
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress = Math.min(progress + Math.random() * 10, 88);
+      inner.style.width = progress + '%';
+    }, 400);
+
+    try {
+      // ✅ Appel au backend — pas d'API key dans le HTML !
+      const res = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          product,
+          category,
+          langs: activeLangs,
+          modules: activeModules
+        })
+      });
+
+      const parsed = await res.json();
+      if (parsed.error) throw new Error(parsed.error);
+
+      clearInterval(interval);
+      inner.style.width = '100%';
+      renderResults(parsed, activeLangs, activeModules);
+      setTimeout(() => { bar.classList.remove('visible'); inner.style.width = '0%'; }, 500);
+
+    } catch(e) {
+      clearInterval(interval);
+      bar.classList.remove('visible');
+      inner.style.width = '0%';
+      showError(e.message || "Une erreur est survenue.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '⚡ Générer tout le contenu';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('visible');
+  }
+
+  function renderResults(data, langs, modules) {
+    const sectionsEl = document.getElementById('module-sections');
+    sectionsEl.innerHTML = '';
+    if (modules.includes('fiche'))  sectionsEl.appendChild(buildSection('📄 Fiche produit', langs, data, 'fiche', renderFiche));
+    if (modules.includes('social')) sectionsEl.appendChild(buildSection('📱 Posts réseaux sociaux', langs, data, 'social', renderSocial));
+    if (modules.includes('email'))  sectionsEl.appendChild(buildSection('✉️ Email marketing', langs, data, 'email', renderEmail));
+    document.getElementById('results').classList.add('visible');
+  }
+
+  function buildSection(title, langs, data, key, renderFn) {
+    const section = document.createElement('div');
+    section.className = 'module-section';
+    const titleEl = document.createElement('div');
+    titleEl.className = 'module-title';
+    titleEl.textContent = title;
+    section.appendChild(titleEl);
+    const hr = document.createElement('hr');
+    hr.className = 'divider';
+    section.appendChild(hr);
+    const tabs = document.createElement('div');
+    tabs.className = 'tabs';
+    const contents = document.createElement('div');
+    langs.forEach((lang, i) => {
+      if (!data[lang] || !data[lang][key]) return;
+      const meta = langMeta[lang];
+      const contentId = key + '-content-' + lang;
+      const tab = document.createElement('button');
+      tab.className = 'tab' + (i === 0 ? ' active' : '');
+      tab.textContent = meta.flag + ' ' + meta.label;
+      tab.onclick = () => {
+        tabs.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        contents.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(contentId).classList.add('active');
+      };
+      tabs.appendChild(tab);
+      const div = document.createElement('div');
+      div.className = 'tab-content' + (i === 0 ? ' active' : '');
+      div.id = contentId;
+      div.innerHTML = renderFn(data[lang][key]);
+      contents.appendChild(div);
+    });
+    section.appendChild(tabs);
+    section.appendChild(contents);
+    return section;
+  }
+
+  function renderFiche(d) {
+    return makeCard('Titre', d.titre || '') + makeCard('Tagline', d.tagline || '') +
+           makeCard('Description', d.description || '') +
+           makeCard('Points forts', Array.isArray(d.points_forts) ? d.points_forts.map(p => '• ' + p).join('\n') : '') +
+           makeCard('Call-to-action', d.cta || '');
+  }
+  function renderSocial(d) {
+    return '<div class="social-grid">' + makeCard('Post Instagram', d.instagram || '') + makeCard('Post LinkedIn', d.linkedin || '') + '</div>';
+  }
+  function renderEmail(d) {
+    return makeCard('Objet', d.objet || '') + makeCard('Préheader', d.preheader || '') + makeCard("Corps de l'email", d.corps || '');
+  }
+  function makeCard(label, text) {
+    const id = 'c' + Math.random().toString(36).slice(2);
+    return `<div class="card"><div class="card-label">${label}</div><div class="card-text" id="${id}">${text}</div><button class="copy-btn" onclick="copyText('${id}',this)">Copier</button></div>`;
+  }
+  function copyText(id, btn) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    navigator.clipboard.writeText(el.textContent).then(() => {
+      btn.textContent = 'Copié !';
+      setTimeout(() => btn.textContent = 'Copier', 1500);
+    });
+  }
+  document.getElementById('product-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') generate();
+  });
+</script>
+</body>
+</html>

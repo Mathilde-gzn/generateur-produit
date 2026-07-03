@@ -14,6 +14,30 @@
       padding: 2rem 1rem;
     }
     .app { max-width: 820px; margin: 0 auto; }
+    .upgrade-banner {
+      display: none;
+      background: #F88A5F;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .upgrade-banner a {
+      background: #fff;
+      color: #F88A5F;
+      padding: 5px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .upgrade-banner.hidden { display: none; }
     .header { margin-bottom: 2rem; }
     .header h1 { font-size: 24px; font-weight: 500; }
     .header p { font-size: 14px; color: #666; margin-top: 4px; }
@@ -109,6 +133,11 @@
     <div>Connecté : <span id="user-email">...</span> · Générations restantes : <span class="quota" id="quota">...</span></div>
     <button onclick="logout()">Déconnexion</button>
   </div>
+
+  <div class="upgrade-banner hidden" id="upgrade-banner">
+    <span>🚀 Vous avez atteint votre limite gratuite de 5 générations !</span>
+    <a href="https://buy.stripe.com/test_00wcN45iF3r2d1b9zq8IU00" target="_blank">Passer au Pro →</a>
+  </div>
   <div class="header">
     <h1>Générateur de contenu produit</h1>
     <p>Fiche produit · Réseaux sociaux · Email marketing · Multi-langues</p>
@@ -159,7 +188,7 @@
 <script>
   // ⚠️ Remplace par tes vraies infos Supabase (les mêmes que dans login.html)
   const SUPABASE_URL = "https://tpyosrakpsohskvmyquo.supabase.co";
-  const SUPABASE_KEY = "sbeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRweW9zcmFrcHNvaHNrdm15cXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MTI1MzEsImV4cCI6MjA5ODM4ODUzMX0.U9C2BxjwIP5W0mHBLAX4E6daMaq8mVLQvGDUQuD049w_publishable_Z_j_K1xtt-timok2YJJapw_SQqyl6lH";
+  const SUPABASE_KEY = "COLLE_TA_PUBLISHABLE_KEY_ICI";
   const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   let currentToken = null;
@@ -182,6 +211,9 @@
       const data = await res.json();
       document.getElementById('user-email').textContent = data.email || '';
       document.getElementById('quota').textContent = data.remaining;
+      if (data.remaining === 0) {
+        document.getElementById('upgrade-banner').classList.remove('hidden');
+      }
     } catch (e) {
       console.error(e);
     }

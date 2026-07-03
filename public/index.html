@@ -3,147 +3,426 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Générateur de contenu produit</title>
+  <title>noa. — Générateur de contenu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f5f5f3;
-      color: #1a1a18;
-      min-height: 100vh;
-      padding: 2rem 1rem;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #000000;
+      --green: #A9F6A7;
+      --coral: #F88A5F;
+      --white: #FFFFFF;
+      --gray: #f5f5f3;
+      --border: #e8e8e6;
+      --text-muted: #888;
     }
-    .app { max-width: 820px; margin: 0 auto; }
-    .upgrade-banner {
-      display: none;
-      background: #F88A5F;
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-size: 13px;
-      margin-bottom: 1rem;
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--gray);
+      color: var(--black);
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 56px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .upgrade-banner a {
-      background: #fff;
-      color: #F88A5F;
-      padding: 5px 14px;
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--black);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-logo span { color: var(--green); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+    }
+
+    .nav-user {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .quota-badge {
+      background: var(--gray);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--black);
+    }
+
+    .quota-badge.low { background: #fff5f0; border-color: var(--coral); color: var(--coral); }
+
+    .logout-btn {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 4px 0;
+    }
+
+    .logout-btn:hover { color: var(--black); }
+
+    /* UPGRADE BANNER */
+    .upgrade-banner {
+      background: var(--coral);
+      color: var(--white);
+      padding: 10px 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .upgrade-banner.hidden { display: none; }
+
+    .upgrade-btn {
+      background: var(--white);
+      color: var(--coral);
+      padding: 5px 16px;
       border-radius: 100px;
       font-size: 12px;
       font-weight: 600;
       text-decoration: none;
       white-space: nowrap;
     }
-    .upgrade-banner.hidden { display: none; }
-    .header { margin-bottom: 2rem; }
-    .header h1 { font-size: 24px; font-weight: 500; }
-    .header p { font-size: 14px; color: #666; margin-top: 4px; }
-    .input-section {
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
+
+    /* MAIN */
+    .main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
     }
-    .input-row { display: flex; gap: 12px; margin-bottom: 12px; }
-    input[type="text"], select {
-      flex: 1;
-      font-size: 15px;
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      outline: none;
-      background: #fff;
-      color: #1a1a18;
-      font-family: inherit;
+
+    .page-header {
+      margin-bottom: 1.5rem;
     }
-    input[type="text"]:focus, select:focus { border-color: #888; }
-    .section-label { font-size: 12px; color: #888; margin-bottom: 8px; }
-    .lang-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-    .lang-btn {
-      font-size: 13px; padding: 4px 12px; border-radius: 8px;
-      border: 1px solid #ccc; background: transparent; color: #888;
-      cursor: pointer; font-family: inherit; transition: all 0.15s;
+
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
     }
-    .lang-btn.active { background: #e8f0fe; color: #1a56db; border-color: #93b4f5; }
-    .modules-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-    .module-btn {
-      font-size: 13px; padding: 6px 14px; border-radius: 8px;
-      border: 1px solid #ccc; background: transparent; color: #888;
-      cursor: pointer; font-family: inherit; transition: all 0.15s;
-    }
-    .module-btn.active { background: #f0fdf4; color: #16a34a; border-color: #86efac; }
-    .generate-btn {
-      width: 100%; padding: 10px; font-size: 15px; font-weight: 500;
-      border-radius: 8px; border: none; background: #1a1a18; color: #fff;
-      cursor: pointer; font-family: inherit; transition: opacity 0.15s;
-    }
-    .generate-btn:hover { opacity: 0.85; }
-    .generate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .loading-bar { height: 3px; border-radius: 2px; background: #eee; overflow: hidden; margin: 12px 0; display: none; }
-    .loading-bar.visible { display: block; }
-    .loading-bar-inner { height: 100%; width: 0%; background: #1a1a18; border-radius: 2px; transition: width 0.4s ease; }
-    .error-msg { font-size: 13px; color: #b91c1c; padding: 8px 12px; background: #fef2f2; border-radius: 8px; margin-top: 8px; display: none; }
-    .error-msg.visible { display: block; }
-    .results { display: none; margin-top: 1.5rem; }
-    .results.visible { display: block; }
-    .module-sections { display: flex; flex-direction: column; gap: 1.5rem; }
-    .module-title { font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: #888; margin-bottom: 10px; }
-    .tabs { display: flex; gap: 4px; margin-bottom: 1rem; flex-wrap: wrap; }
-    .tab { font-size: 13px; padding: 6px 14px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: #888; cursor: pointer; font-family: inherit; transition: all 0.15s; }
-    .tab.active { background: #fff; color: #1a1a18; border-color: #aaa; font-weight: 500; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-    .card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1.25rem; margin-bottom: 12px; }
-    .card-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: #888; margin-bottom: 8px; }
-    .card-text { font-size: 14px; color: #1a1a18; line-height: 1.7; white-space: pre-wrap; }
-    .copy-btn { margin-top: 10px; font-size: 12px; padding: 4px 10px; border-radius: 8px; border: 1px solid #ddd; background: transparent; color: #888; cursor: pointer; font-family: inherit; }
-    .copy-btn:hover { border-color: #aaa; color: #1a1a18; }
-    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 600px) { .social-grid { grid-template-columns: 1fr; } }
-    .divider { border: none; border-top: 1px solid #eee; margin: 0.5rem 0 1rem; }
-    .user-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
+
+    .page-header p {
       font-size: 13px;
-      color: #666;
+      color: var(--text-muted);
     }
-    .user-bar .quota { font-weight: 500; color: #1a1a18; }
-    .user-bar button {
+
+    /* CARD */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* INPUTS */
+    .input-row { display: flex; gap: 10px; margin-bottom: 14px; }
+
+    input[type="text"] {
+      flex: 1;
+      font-size: 14px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      background: var(--gray);
+      color: var(--black);
+      font-family: inherit;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--black);
+      background: var(--white);
+    }
+
+    select {
+      font-size: 13px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      background: var(--gray);
+      color: var(--black);
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      font-size: 13px;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      background: var(--gray);
+      color: var(--black);
+      font-family: inherit;
+      resize: vertical;
+      min-height: 52px;
+      margin-bottom: 14px;
+      transition: border-color 0.15s;
+      line-height: 1.5;
+    }
+
+    textarea:focus { border-color: var(--black); background: var(--white); }
+
+    /* TOGGLE BUTTONS */
+    .toggle-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .toggle-btn {
       font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      background: transparent;
-      color: #888;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--gray);
+      color: var(--text-muted);
       cursor: pointer;
       font-family: inherit;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
-    .user-bar button:hover { border-color: #aaa; color: #1a1a18; }
+
+    .toggle-btn.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .toggle-btn.active.green {
+      background: #e8fde8;
+      color: #1a7a1a;
+      border-color: var(--green);
+    }
+
+    /* GENERATE BUTTON */
+    .generate-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 10px;
+      border: none;
+      background: var(--black);
+      color: var(--white);
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.15s;
+      letter-spacing: 0.01em;
+      margin-top: 4px;
+    }
+
+    .generate-btn:hover { opacity: 0.8; }
+    .generate-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    /* LOADING */
+    .loading-bar {
+      height: 2px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 12px;
+      display: none;
+    }
+    .loading-bar.visible { display: block; }
+    .loading-bar-inner {
+      height: 100%;
+      width: 0%;
+      background: var(--black);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    /* ERROR */
+    .error-msg {
+      font-size: 12px;
+      color: #c0392b;
+      padding: 8px 12px;
+      background: #fef2f2;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    /* RESULTS */
+    .results { display: none; margin-top: 1.5rem; }
+    .results.visible { display: block; }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .results-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .module-sections { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .module-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* LANG TABS */
+    .tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+
+    .tab {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--gray);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .tab.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* RESULT CARDS */
+    .result-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .result-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .result-text {
+      font-size: 13px;
+      color: var(--black);
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .copy-btn {
+      margin-top: 8px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--gray);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover { background: var(--black); color: var(--white); border-color: var(--black); }
+    .copy-btn.copied { background: var(--green); color: var(--black); border-color: var(--green); }
+
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    @media (max-width: 600px) {
+      .social-grid { grid-template-columns: 1fr; }
+      .input-row { flex-direction: column; }
+      nav { padding: 0 1rem; }
+      .main { padding: 1.5rem 1rem 3rem; }
+    }
   </style>
 </head>
 <body>
-<div class="app">
-  <div class="user-bar">
-    <div>Connecté : <span id="user-email">...</span> · Générations restantes : <span class="quota" id="quota">...</span></div>
-    <button onclick="logout()">Déconnexion</button>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="/landing.html">noa<span>.</span></a>
+  <div class="nav-right">
+    <span class="nav-user" id="user-email">...</span>
+    <span class="quota-badge" id="quota-badge">... générations</span>
+    <button class="logout-btn" onclick="logout()">Déconnexion</button>
+  </div>
+</nav>
+
+<!-- UPGRADE BANNER -->
+<div class="upgrade-banner hidden" id="upgrade-banner">
+  <span>🚀 Vous avez atteint votre limite de 5 générations gratuites</span>
+  <a class="upgrade-btn" href="https://buy.stripe.com/test_00wcN45iF3r2d1b9zq8IU00" target="_blank">Passer au Pro →</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <div class="page-header">
+    <h1>Générateur de contenu</h1>
+    <p>Décrivez votre produit et obtenez votre contenu en quelques secondes.</p>
   </div>
 
-  <div class="upgrade-banner hidden" id="upgrade-banner">
-    <span>🚀 Vous avez atteint votre limite gratuite de 5 générations !</span>
-    <a href="https://buy.stripe.com/test_00wcN45iF3r2d1b9zq8IU00" target="_blank">Passer au Pro →</a>
-  </div>
-  <div class="header">
-    <h1>Générateur de contenu produit</h1>
-    <p>Fiche produit · Réseaux sociaux · Email marketing · Multi-langues</p>
-  </div>
-
-  <div class="input-section">
+  <!-- INPUT CARD -->
+  <div class="card">
+    <div class="card-title">Votre produit</div>
     <div class="input-row">
       <input type="text" id="product-input" placeholder="Ex: Chaussures running légères" />
       <select id="category-select">
@@ -155,76 +434,45 @@
         <option value="maison">Maison</option>
       </select>
     </div>
+    <textarea id="keywords-input" placeholder="Mots clés à faire ressortir (ex: confort, made in France, eco-friendly...)"></textarea>
 
-    <p class="section-label">Mots clés / éléments importants à faire ressortir :</p>
-    <textarea id="keywords-input" placeholder="Ex: confort, légèreté, made in France, eco-friendly, résistant à l'eau..."></textarea>
-
-    <p class="section-label">Modules à générer :</p>
-    <div class="modules-row">
-      <button class="module-btn active" data-module="fiche">📄 Fiche produit</button>
-      <button class="module-btn active" data-module="social">📱 Posts réseaux sociaux</button>
-      <button class="module-btn active" data-module="email">✉️ Email marketing</button>
+    <div class="card-title">Modules</div>
+    <div class="toggle-row" style="margin-bottom: 14px;">
+      <button class="toggle-btn active" data-module="fiche">📄 Fiche produit</button>
+      <button class="toggle-btn active" data-module="social">📱 Réseaux sociaux</button>
+      <button class="toggle-btn active" data-module="email">✉️ Email marketing</button>
     </div>
 
-    <p class="section-label">Langues :</p>
-    <div class="lang-row">
-      <button class="lang-btn active" data-lang="fr">🇫🇷 Français</button>
-      <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
-      <button class="lang-btn active" data-lang="de">🇩🇪 Deutsch</button>
-      <button class="lang-btn active" data-lang="es">🇪🇸 Español</button>
+    <div class="card-title">Langues</div>
+    <div class="toggle-row" style="margin-bottom: 16px;">
+      <button class="toggle-btn active green" data-lang="fr">🇫🇷 Français</button>
+      <button class="toggle-btn active green" data-lang="en">🇬🇧 English</button>
+      <button class="toggle-btn active green" data-lang="de">🇩🇪 Deutsch</button>
+      <button class="toggle-btn active green" data-lang="es">🇪🇸 Español</button>
     </div>
 
-    <button class="generate-btn" id="generate-btn" onclick="generate()">⚡ Générer tout le contenu</button>
+    <button class="generate-btn" id="generate-btn" onclick="generate()">⚡ Générer le contenu</button>
     <div class="loading-bar" id="loading-bar"><div class="loading-bar-inner" id="loading-inner"></div></div>
     <div class="error-msg" id="error-msg"></div>
   </div>
 
+  <!-- RESULTS -->
   <div class="results" id="results">
+    <div class="results-header">
+      <span class="results-title">Résultats</span>
+    </div>
     <div class="module-sections" id="module-sections"></div>
   </div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // ⚠️ Remplace par tes vraies infos Supabase (les mêmes que dans login.html)
   const SUPABASE_URL = "https://tpyosrakpsohskvmyquo.supabase.co";
-  const SUPABASE_KEY = "COLLE_TA_PUBLISHABLE_KEY_ICI";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRweW9zcmFrcHNvaHNrdm15cXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MTI1MzEsImV4cCI6MjA5ODM4ODUzMX0.U9C2BxjwIP5W0mHBLAX4E6daMaq8mVLQvGDUQuD049w";
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   let currentToken = null;
-
-  async function initAuth() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      window.location.href = '/login.html';
-      return;
-    }
-    currentToken = session.access_token;
-    loadProfile();
-  }
-
-  async function loadProfile() {
-    try {
-      const res = await fetch('/me', {
-        headers: { 'Authorization': 'Bearer ' + currentToken }
-      });
-      const data = await res.json();
-      document.getElementById('user-email').textContent = data.email || '';
-      document.getElementById('quota').textContent = data.remaining;
-      if (data.remaining === 0) {
-        document.getElementById('upgrade-banner').classList.remove('hidden');
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  async function logout() {
-    await supabase.auth.signOut();
-    window.location.href = '/login.html';
-  }
-
-  initAuth();
 
   const langMeta = {
     fr: { label: "Français", flag: "🇫🇷" },
@@ -233,10 +481,39 @@
     es: { label: "Español",  flag: "🇪🇸" }
   };
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+  async function initAuth() {
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session) { window.location.href = '/login.html'; return; }
+    currentToken = session.access_token;
+    loadProfile();
+  }
+
+  async function loadProfile() {
+    try {
+      const res = await fetch('/me', { headers: { 'Authorization': 'Bearer ' + currentToken } });
+      const data = await res.json();
+      document.getElementById('user-email').textContent = data.email || '';
+      const remaining = data.remaining;
+      const badge = document.getElementById('quota-badge');
+      badge.textContent = remaining === 'illimité' ? '∞ illimité' : remaining + ' restantes';
+      if (remaining === 0) {
+        badge.classList.add('low');
+        document.getElementById('upgrade-banner').classList.remove('hidden');
+      }
+    } catch(e) { console.error(e); }
+  }
+
+  async function logout() {
+    await sbClient.auth.signOut();
+    window.location.href = '/login.html';
+  }
+
+  initAuth();
+
+  document.querySelectorAll('[data-module]').forEach(btn => {
     btn.addEventListener('click', () => btn.classList.toggle('active'));
   });
-  document.querySelectorAll('.module-btn').forEach(btn => {
+  document.querySelectorAll('[data-lang]').forEach(btn => {
     btn.addEventListener('click', () => btn.classList.toggle('active'));
   });
 
@@ -244,9 +521,8 @@
     const product = document.getElementById('product-input').value.trim();
     if (!product) { showError("Veuillez entrer un nom de produit."); return; }
 
-    const activeLangs   = [...document.querySelectorAll('.lang-btn.active')].map(b => b.dataset.lang);
-    const activeModules = [...document.querySelectorAll('.module-btn.active')].map(b => b.dataset.module);
-
+    const activeLangs   = [...document.querySelectorAll('[data-lang].active')].map(b => b.dataset.lang);
+    const activeModules = [...document.querySelectorAll('[data-module].active')].map(b => b.dataset.module);
     if (activeLangs.length === 0)   { showError("Sélectionnez au moins une langue."); return; }
     if (activeModules.length === 0) { showError("Sélectionnez au moins un module."); return; }
 
@@ -268,20 +544,10 @@
     }, 400);
 
     try {
-      // ✅ Appel au backend avec le token utilisateur
       const res = await fetch('/generate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + currentToken
-        },
-        body: JSON.stringify({
-          product,
-          category,
-          keywords,
-          langs: activeLangs,
-          modules: activeModules
-        })
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + currentToken },
+        body: JSON.stringify({ product, category, keywords, langs: activeLangs, modules: activeModules })
       });
 
       const parsed = await res.json();
@@ -290,7 +556,7 @@
       clearInterval(interval);
       inner.style.width = '100%';
       renderResults(parsed, activeLangs, activeModules);
-      loadProfile(); // met à jour le quota affiché
+      loadProfile();
       setTimeout(() => { bar.classList.remove('visible'); inner.style.width = '0%'; }, 500);
 
     } catch(e) {
@@ -300,7 +566,7 @@
       showError(e.message || "Une erreur est survenue.");
     } finally {
       btn.disabled = false;
-      btn.textContent = '⚡ Générer tout le contenu';
+      btn.textContent = '⚡ Générer le contenu';
     }
   }
 
@@ -314,28 +580,26 @@
     const sectionsEl = document.getElementById('module-sections');
     sectionsEl.innerHTML = '';
     if (modules.includes('fiche'))  sectionsEl.appendChild(buildSection('📄 Fiche produit', langs, data, 'fiche', renderFiche));
-    if (modules.includes('social')) sectionsEl.appendChild(buildSection('📱 Posts réseaux sociaux', langs, data, 'social', renderSocial));
+    if (modules.includes('social')) sectionsEl.appendChild(buildSection('📱 Réseaux sociaux', langs, data, 'social', renderSocial));
     if (modules.includes('email'))  sectionsEl.appendChild(buildSection('✉️ Email marketing', langs, data, 'email', renderEmail));
     document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function buildSection(title, langs, data, key, renderFn) {
     const section = document.createElement('div');
-    section.className = 'module-section';
+    section.className = 'card';
     const titleEl = document.createElement('div');
-    titleEl.className = 'module-title';
+    titleEl.className = 'module-section-title';
     titleEl.textContent = title;
     section.appendChild(titleEl);
-    const hr = document.createElement('hr');
-    hr.className = 'divider';
-    section.appendChild(hr);
     const tabs = document.createElement('div');
     tabs.className = 'tabs';
     const contents = document.createElement('div');
     langs.forEach((lang, i) => {
       if (!data[lang] || !data[lang][key]) return;
       const meta = langMeta[lang];
-      const contentId = key + '-content-' + lang;
+      const contentId = key + '-' + lang;
       const tab = document.createElement('button');
       tab.className = 'tab' + (i === 0 ? ' active' : '');
       tab.textContent = meta.flag + ' ' + meta.label;
@@ -363,24 +627,34 @@
            makeCard('Points forts', Array.isArray(d.points_forts) ? d.points_forts.map(p => '• ' + p).join('\n') : '') +
            makeCard('Call-to-action', d.cta || '');
   }
+
   function renderSocial(d) {
-    return '<div class="social-grid">' + makeCard('Post Instagram', d.instagram || '') + makeCard('Post LinkedIn', d.linkedin || '') + '</div>';
+    return '<div class="social-grid">' + makeCard('Instagram', d.instagram || '') + makeCard('LinkedIn', d.linkedin || '') + '</div>';
   }
+
   function renderEmail(d) {
-    return makeCard('Objet', d.objet || '') + makeCard('Préheader', d.preheader || '') + makeCard("Corps de l'email", d.corps || '');
+    return makeCard('Objet', d.objet || '') + makeCard('Préheader', d.preheader || '') + makeCard("Corps", d.corps || '');
   }
+
   function makeCard(label, text) {
     const id = 'c' + Math.random().toString(36).slice(2);
-    return `<div class="card"><div class="card-label">${label}</div><div class="card-text" id="${id}">${text}</div><button class="copy-btn" onclick="copyText('${id}',this)">Copier</button></div>`;
+    return `<div class="result-card">
+      <div class="result-label">${label}</div>
+      <div class="result-text" id="${id}">${text}</div>
+      <button class="copy-btn" onclick="copyText('${id}', this)">Copier</button>
+    </div>`;
   }
+
   function copyText(id, btn) {
     const el = document.getElementById(id);
     if (!el) return;
     navigator.clipboard.writeText(el.textContent).then(() => {
-      btn.textContent = 'Copié !';
-      setTimeout(() => btn.textContent = 'Copier', 1500);
+      btn.textContent = 'Copié ✓';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 1500);
     });
   }
+
   document.getElementById('product-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') generate();
   });

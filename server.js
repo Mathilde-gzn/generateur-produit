@@ -14,8 +14,8 @@ const FREE_LIMIT = 5;
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
+// Route landing page en premier
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'landing.html'));
 });
@@ -55,7 +55,6 @@ app.get('/me', checkUser, async (req, res) => {
 app.post('/generate', checkUser, async (req, res) => {
   const { product, category, langs, modules, keywords } = req.body;
 
-  // Vérifie le profil et la limite de générations
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('generations_count, plan')
@@ -141,7 +140,6 @@ N'inclus que les langues demandées. Adapte le ton à la catégorie.`;
     const clean = raw.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
 
-    // Incrémente le compteur de générations
     await supabase
       .from('profiles')
       .update({ generations_count: profile.generations_count + 1 })
@@ -154,6 +152,9 @@ N'inclus que les langues demandées. Adapte le ton à la catégorie.`;
     res.status(500).json({ error: 'Erreur serveur. Réessayez.' });
   }
 });
+
+// Fichiers statiques après les routes
+app.use(express.static(path.join(__dirname, 'public')));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Serveur lancé sur http://localhost:${PORT}`));

@@ -1,7 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const { createClient } = require('@supabase/supabase-js');
 require('dotenv').config();
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+const FREE_LIMIT = 5;
 
 const app = express();
 app.use(cors());
@@ -12,8 +20,57 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.post('/generate', async (req, res) => {
+// Vérifie le token utilisateur envoyé depuis le frontend
+async function checkUser(req, res, next) {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Non connecté.' });
+  }
+
+  const token = authHeader.replace('Bearer ', '');
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+
+  if (error || !user) {
+    return res.status(401).json({ error: 'Session invalide. Reconnectez-vous.' });
+  }
+
+  req.user = user;
+  next();
+}
+
+app.get('/me', checkUser, async (req, res) => {
+  const { data: profile, error } = await supabase
+    .from('profiles')
+    .select('email, generations_count, plan')
+    .eq('id', req.user.id)
+    .single();
+
+  if (error) return res.status(500).json({ error: 'Erreur de profil.' });
+  res.json({
+    ...profile,
+    remaining: profile.plan === 'free' ? Math.max(0, FREE_LIMIT - profile.generations_count) : 'illimité'
+  });
+});
+
+app.post('/generate', checkUser, async (req, res) => {
   const { product, category, langs, modules, keywords } = req.body;
+
+  // Vérifie le profil et la limite de générations
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('generations_count, plan')
+    .eq('id', req.user.id)
+    .single();
+
+  if (profileError) {
+    return res.status(500).json({ error: 'Erreur de profil.' });
+  }
+
+  if (profile.plan === 'free' && profile.generations_count >= FREE_LIMIT) {
+    return res.status(403).json({
+      error: `Limite gratuite atteinte (${FREE_LIMIT} générations). Passez au plan payant pour continuer.`
+    });
+  }
 
   if (!product || !langs || langs.length === 0) {
     return res.status(400).json({ error: 'Produit et langues requis.' });
@@ -83,6 +140,12 @@ N'inclus que les langues demandées. Adapte le ton à la catégorie.`;
     const raw   = data.content.map(i => i.text || '').join('');
     const clean = raw.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
+
+    // Incrémente le compteur de générations
+    await supabase
+      .from('profiles')
+      .update({ generations_count: profile.generations_count + 1 })
+      .eq('id', req.user.id);
 
     res.json(parsed);
 

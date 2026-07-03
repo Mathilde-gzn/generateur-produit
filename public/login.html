@@ -84,20 +84,20 @@
     <label>Mot de passe</label>
     <input type="password" id="password" placeholder="••••••••" />
 
-    <button id="submit-btn" onclick="submit()">Se connecter</button>
+    <button id="submit-btn" onclick="handleSubmit()">Se connecter</button>
 
     <div class="switch">
       <span id="switch-text">Pas encore de compte ?</span>
-<a id="switch-link" onclick="toggleMode()" style="cursor:pointer">Créer un compte</a>    </div>
+      <a id="switch-link" onclick="toggleMode()" style="cursor:pointer">Créer un compte</a>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ⚠️ Remplace par tes vraies infos Supabase
     const SUPABASE_URL = "https://tpyosrakpsohskvmyquo.supabase.co";
-    const SUPABASE_KEY = "sb_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRweW9zcmFrcHNvaHNrdm15cXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MTI1MzEsImV4cCI6MjA5ODM4ODUzMX0.U9C2BxjwIP5W0mHBLAX4E6daMaq8mVLQvGDUQuD049wpublishable_Z_j_K1xtt-timok2YJJapw_SQqyl6lH";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRweW9zcmFrcHNvaHNrdm15cXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MTI1MzEsImV4cCI6MjA5ODM4ODUzMX0.U9C2BxjwIP5W0mHBLAX4E6daMaq8mVLQvGDUQuD049w";
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let isSignup = false;
 
@@ -111,11 +111,10 @@
       document.getElementById('msg').className = 'msg';
     }
 
-    async function submit() {
+    async function handleSubmit() {
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const btn = document.getElementById('submit-btn');
-      const msg = document.getElementById('msg');
 
       if (!email || !password) {
         showMsg('error', 'Remplis tous les champs.');
@@ -127,13 +126,15 @@
 
       try {
         if (isSignup) {
-          const { data, error } = await supabase.auth.signUp({ email, password });
+          const { data, error } = await sbClient.auth.signUp({ email, password });
           if (error) throw error;
-          showMsg('success', 'Compte créé ! Vérifie ton email pour confirmer, puis connecte-toi.');
+          showMsg('success', 'Compte créé ! Tu peux maintenant te connecter.');
+          isSignup = false;
+          toggleMode();
         } else {
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
           if (error) throw error;
-          window.location.href = '/app.html';
+          window.location.href = '/index.html';
         }
       } catch (e) {
         showMsg('error', e.message || 'Une erreur est survenue.');
@@ -144,14 +145,13 @@
     }
 
     function showMsg(type, text) {
-      const msg = document.getElementById('msg');
-      msg.className = 'msg ' + type;
-      msg.textContent = text;
+      const el = document.getElementById('msg');
+      el.className = 'msg ' + type;
+      el.textContent = text;
     }
 
-    // Si déjà connecté, redirige directement
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) window.location.href = '/app.html';
+    sbClient.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location.href = '/index.html';
     });
   </script>
 </body>

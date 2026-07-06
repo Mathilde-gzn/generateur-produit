@@ -199,37 +199,19 @@ app.post('/generate', checkUser, async (req, res) => {
   const doSocial = modules.includes('social');
   const doEmail  = modules.includes('email');
 
-  const prompt = `Tu es un expert en copywriting e-commerce et marketing digital.
-Produit : "${product}" — Catégorie : ${category}
-Langues : ${langList}
-${keywords ? `Mots clés et éléments IMPORTANTS à faire ressortir obligatoirement dans tout le contenu : ${keywords}` : ''}
-
-Génère le contenu suivant pour chaque langue.
+  const prompt = `Expert copywriting e-commerce. Génère du contenu marketing pour : "${product}" (${category}).
+${keywords ? `Mots clés obligatoires : ${keywords}.` : ''}
+Langues : ${langList}.
 Réponds UNIQUEMENT en JSON valide, sans markdown ni backticks.
 
-Structure JSON :
 {
   "fr": {
-    ${doFiche ? `"fiche": {
-      "titre": "...",
-      "tagline": "...",
-      "description": "...",
-      "points_forts": ["...", "...", "...", "..."],
-      "cta": "..."
-    },` : ''}
-    ${doSocial ? `"social": {
-      "instagram": "...(post Instagram avec emojis et hashtags)",
-      "linkedin": "...(post LinkedIn professionnel)"
-    },` : ''}
-    ${doEmail ? `"email": {
-      "objet": "...",
-      "preheader": "...",
-      "corps": "..."
-    }` : ''}
+    ${doFiche ? `"fiche": { "titre": "...(max 8 mots)", "tagline": "...(max 12 mots)", "description": "...(2 phrases)", "points_forts": ["...", "...", "..."], "cta": "...(max 6 mots)" },` : ''}
+    ${doSocial ? `"social": { "instagram": "...(post court avec 3 hashtags)", "linkedin": "...(2 phrases pro)" },` : ''}
+    ${doEmail ? `"email": { "objet": "...(max 8 mots)", "preheader": "...(max 10 mots)", "corps": "...(3 phrases)" }` : ''}
   }
 }
-
-N'inclus que les langues demandées. Adapte le ton à la catégorie.`;
+Réplique la même structure pour chaque langue demandée. Sois concis.`;
 
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {

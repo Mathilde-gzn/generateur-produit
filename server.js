@@ -16,7 +16,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 async function sendWelcomeEmail(email) {
   try {
     await resend.emails.send({
-      from: 'noa. <noa@getnoa.fr>',
+      from: 'noa. <onboarding@resend.dev>',
       to: email,
       subject: 'Bienvenue sur noa. 🌿',
       html: `
@@ -240,7 +240,7 @@ N'inclus que les langues demandées. Adapte le ton à la catégorie.`;
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-5',
         max_tokens: 4000,
         messages: [{ role: 'user', content: prompt }]
       })

@@ -32,13 +32,14 @@
 
     /* ─── LEFT ─── */
     .left {
-      background: var(--black);
+      background: var(--white);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       padding: 2.5rem;
       position: relative;
       overflow: hidden;
+      border-right: 1px solid var(--border);
     }
 
     /* Decorative circles */
@@ -51,42 +52,32 @@
     .deco-1 {
       width: 320px;
       height: 320px;
-      border: 1px solid rgba(169,246,167,0.12);
-      top: -80px;
-      right: -80px;
+      background: var(--green);
+      opacity: 0.3;
+      top: -160px;
+      right: -160px;
     }
 
     .deco-2 {
       width: 200px;
       height: 200px;
-      border: 1px solid rgba(169,246,167,0.08);
-      top: -20px;
-      right: -20px;
+      background: var(--coral);
+      opacity: 0.2;
+      bottom: -80px;
+      left: -80px;
     }
 
     .deco-3 {
-      width: 400px;
-      height: 400px;
-      border: 1px solid rgba(248,138,95,0.08);
-      bottom: -160px;
-      left: -160px;
-    }
-
-    .deco-green {
-      width: 180px;
-      height: 180px;
-      background: radial-gradient(circle, rgba(169,246,167,0.15), transparent 70%);
-      top: 40px;
+      width: 120px;
+      height: 120px;
+      background: var(--green);
+      opacity: 0.15;
+      bottom: 80px;
       right: 40px;
     }
 
-    .deco-coral {
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(248,138,95,0.1), transparent 70%);
-      bottom: 60px;
-      left: 20px;
-    }
+    .deco-green { display: none; }
+    .deco-coral { display: none; }
 
     .left-top {
       position: relative;
@@ -95,8 +86,8 @@
 
     .logo {
       display: inline-flex;
-      align-items: center;
-      gap: 2px;
+      align-items: flex-end;
+      gap: 1px;
       text-decoration: none;
       margin-bottom: 3rem;
     }
@@ -104,8 +95,9 @@
     .logo-text {
       font-size: 24px;
       font-weight: 700;
-      color: var(--white);
+      color: var(--black);
       letter-spacing: -1px;
+      line-height: 1;
     }
 
     .logo-dot {
@@ -113,13 +105,14 @@
       height: 7px;
       background: var(--green);
       border-radius: 50%;
-      margin-bottom: 12px;
+      margin-bottom: 2px;
+      flex-shrink: 0;
     }
 
     .left-headline {
       font-size: clamp(30px, 3vw, 44px);
       font-weight: 700;
-      color: var(--white);
+      color: var(--black);
       line-height: 1.1;
       letter-spacing: -1.5px;
       margin-bottom: 1.25rem;
@@ -127,12 +120,12 @@
 
     .left-headline em {
       font-style: normal;
-      color: var(--green);
+      color: var(--coral);
     }
 
     .left-sub {
       font-size: 13px;
-      color: rgba(255,255,255,0.45);
+      color: var(--muted);
       line-height: 1.75;
       max-width: 300px;
     }
@@ -151,27 +144,28 @@
       align-items: center;
       gap: 12px;
       padding: 10px 14px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 10px;
     }
 
     .feature-icon {
       width: 30px;
       height: 30px;
-      background: rgba(169,246,167,0.12);
+      background: var(--white);
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
       flex-shrink: 0;
+      border: 1px solid var(--border);
     }
 
     .feature-text {
       font-size: 12px;
-      font-weight: 500;
-      color: rgba(255,255,255,0.55);
+      font-weight: 600;
+      color: var(--text);
     }
 
     .left-bottom {
@@ -181,7 +175,7 @@
 
     .left-bottom p {
       font-size: 11px;
-      color: rgba(255,255,255,0.2);
+      color: #ccc;
     }
 
     /* ─── RIGHT ─── */

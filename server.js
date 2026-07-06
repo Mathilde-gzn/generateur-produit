@@ -3,12 +3,85 @@ const cors = require('cors');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const { Resend } = require('resend');
 require('dotenv').config();
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+async function sendWelcomeEmail(email) {
+  try {
+    await resend.emails.send({
+      from: 'noa. <onboarding@resend.dev>',
+      to: email,
+      subject: 'Bienvenue sur noa. 🌿',
+      html: `
+        <div style="font-family: 'Montserrat', Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e8e8e6;">
+          
+          <!-- Header -->
+          <div style="background: #0a0a0a; padding: 32px; text-align: center;">
+            <div style="font-size: 32px; font-weight: 700; color: #ffffff; letter-spacing: -1px;">
+              noa<span style="color: #A9F6A7;">.</span>
+            </div>
+          </div>
+
+          <!-- Body -->
+          <div style="padding: 40px 36px;">
+            <h1 style="font-size: 22px; font-weight: 700; color: #0a0a0a; margin: 0 0 12px; letter-spacing: -0.5px;">
+              Bienvenue sur noa. 👋
+            </h1>
+            <p style="font-size: 14px; color: #666; line-height: 1.7; margin: 0 0 24px;">
+              Votre compte est créé ! Vous pouvez dès maintenant générer vos premiers contenus produit en quelques secondes.
+            </p>
+
+            <!-- Feature pills -->
+            <div style="background: #f7f7f5; border-radius: 12px; padding: 20px; margin-bottom: 28px;">
+              <p style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #999; margin: 0 0 14px;">Ce que vous pouvez faire</p>
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 16px;">📄</span>
+                  <span style="font-size: 13px; color: #1a1a18; font-weight: 500;">Fiche produit complète en 30 secondes</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 16px;">📱</span>
+                  <span style="font-size: 13px; color: #1a1a18; font-weight: 500;">Posts Instagram & LinkedIn adaptés</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 16px;">🌍</span>
+                  <span style="font-size: 13px; color: #1a1a18; font-weight: 500;">4 langues — FR, EN, DE, ES</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Free badge -->
+            <div style="background: #e8fde8; border: 1px solid #b8f5b6; border-radius: 10px; padding: 14px 18px; margin-bottom: 28px; display: flex; align-items: center; gap: 10px;">
+              <div style="width: 8px; height: 8px; background: #A9F6A7; border-radius: 50; flex-shrink: 0;"></div>
+              <span style="font-size: 13px; font-weight: 600; color: #1a7a1a;">Vous avez 5 générations gratuites pour commencer !</span>
+            </div>
+
+            <!-- CTA -->
+            <a href="https://www.getnoa.fr/login.html" style="display: block; text-align: center; background: #0a0a0a; color: #ffffff; font-size: 14px; font-weight: 700; padding: 14px; border-radius: 10px; text-decoration: none; letter-spacing: 0.02em;">
+              Commencer à générer →
+            </a>
+          </div>
+
+          <!-- Footer -->
+          <div style="padding: 20px 36px; border-top: 1px solid #e8e8e6; text-align: center;">
+            <p style="font-size: 11px; color: #ccc; margin: 0;">© 2025 noa. — Créé par Mathilde GAZEZIAN</p>
+          </div>
+
+        </div>
+      `
+    });
+    console.log(`✅ Email de bienvenue envoyé à ${email}`);
+  } catch (err) {
+    console.error('Erreur email:', err);
+  }
+}
 
 const FREE_LIMIT = 5;
 
@@ -49,6 +122,14 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 });
 
 app.use(express.json());
+
+// Route signup — envoie email de bienvenue
+app.post('/signup', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email requis.' });
+  await sendWelcomeEmail(email);
+  res.json({ success: true });
+});
 
 // Route landing page en premier
 app.get('/', (req, res) => {

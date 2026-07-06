@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Allow: /login.html
+Disallow: /index.html
+
+Sitemap: https://www.getnoa.fr/sitemap.xml

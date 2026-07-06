@@ -16,7 +16,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 async function sendWelcomeEmail(email) {
   try {
     await resend.emails.send({
-      from: 'noa. <onboarding@resend.dev>',
+      from: 'noa. <noa@getnoa.fr>',
       to: email,
       subject: 'Bienvenue sur noa. 🌿',
       html: `

@@ -83,7 +83,7 @@ async function sendWelcomeEmail(email) {
   }
 }
 
-const FREE_LIMIT = 5;
+const FREE_LIMIT = 10;
 
 const app = express();
 app.use(cors());

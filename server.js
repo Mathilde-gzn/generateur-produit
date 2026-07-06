@@ -240,8 +240,8 @@ N'inclus que les langues demandées. Adapte le ton à la catégorie.`;
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-5',
-        max_tokens: 4000,
+        model: 'claude-sonnet-4-6',
+        max_tokens: 8000,
         messages: [{ role: 'user', content: prompt }]
       })
     });

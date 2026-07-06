@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 require('dotenv').config();
 
 const supabase = createClient(
@@ -13,6 +14,40 @@ const FREE_LIMIT = 5;
 
 const app = express();
 app.use(cors());
+
+// ⚠️ Webhook Stripe doit être AVANT express.json()
+app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error('Webhook error:', err.message);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed' || event.type === 'invoice.paid') {
+    const session = event.data.object;
+    const customerEmail = session.customer_email || session.customer_details?.email;
+
+    if (customerEmail) {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ plan: 'pro' })
+        .eq('email', customerEmail);
+
+      if (error) {
+        console.error('Supabase update error:', error);
+      } else {
+        console.log(`✅ Plan Pro activé pour ${customerEmail}`);
+      }
+    }
+  }
+
+  res.json({ received: true });
+});
+
 app.use(express.json());
 
 // Route landing page en premier

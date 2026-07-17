@@ -1,477 +1,311 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>noa. — De l'idée au contenu. En un clic.</title>
-  <meta name="description" content="noa. génère vos fiches produit, posts réseaux sociaux et emails marketing en quelques secondes — en français, anglais, allemand et espagnol. Essayez gratuitement." />
-  <meta name="keywords" content="générateur contenu produit, fiche produit IA, marketing contenu automatique, génération contenu e-commerce, IA marketing, noa" />
-  <meta name="author" content="Mathilde GAZEZIAN" />
-  <meta name="robots" content="index, follow" />
-  <meta name="google-site-verification" content="1t-pdEBFunj76IB69Z7rYS8iVzXsxIQkeXud5ZvKGNk" />
-  <link rel="canonical" href="https://www.getnoa.fr" />
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.getnoa.fr" />
-  <meta property="og:title" content="noa. — De l'idée au contenu. En un clic." />
-  <meta property="og:description" content="Générez vos fiches produit, posts réseaux sociaux et emails marketing en quelques secondes — en 4 langues. Essayez gratuitement." />
-  <meta property="og:site_name" content="noa." />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="noa. — De l'idée au contenu. En un clic." />
-  <meta name="twitter:description" content="Générez vos fiches produit, posts réseaux sociaux et emails marketing en quelques secondes — en 4 langues." />
-
-  <!-- Favicon -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffffff'/><text y='.9em' font-size='70' x='10' fill='%23A9F6A7' font-family='sans-serif' font-weight='bold'>n.</text></svg>">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>noa. — De l'idée au contenu. En un clic.</title>
+<meta name="description" content="noa. génère vos fiches produit, posts réseaux sociaux et emails marketing en quelques secondes — en français, anglais, allemand et espagnol. Essayez gratuitement." />
+<meta name="keywords" content="générateur contenu produit, fiche produit IA, marketing contenu automatique, génération contenu e-commerce, IA marketing, noa" />
+<meta name="author" content="Mathilde GAZEZIAN" />
+<meta name="robots" content="index, follow" />
+<meta name="google-site-verification" content="1t-pdEBFunj76IB69Z7rYS8iVzXsxIQkeXud5ZvKGNk" />
+<link rel="canonical" href="https://www.getnoa.fr" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://www.getnoa.fr" />
+<meta property="og:title" content="noa. — De l'idée au contenu. En un clic." />
+<meta property="og:description" content="Générez vos fiches produit, posts réseaux sociaux et emails marketing en quelques secondes — en 4 langues. Essayez gratuitement." />
+<meta property="og:site_name" content="noa." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="noa. — De l'idée au contenu. En un clic." />
+<meta name="twitter:description" content="Générez vos fiches produit, posts réseaux sociaux et emails marketing en quelques secondes — en 4 langues." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffffff'/><text y='.9em' font-size='70' x='10' fill='%23A9F6A7' font-family='sans-serif' font-weight='bold'>n.</text></svg>">
 <link rel="manifest" href="/manifest.json" />
 <meta name="theme-color" content="#A9F6A7" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="noa." />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black: #000000;
+    --green: #A9F6A7;
+    --coral: #F88A5F;
+    --white: #FFFFFF;
+    --gray: #f5f5f3;
+    --text-muted: #666;
+  }
 
-    :root {
-      --black: #000000;
-      --green: #A9F6A7;
-      --coral: #F88A5F;
-      --white: #FFFFFF;
-      --gray: #f5f5f3;
-      --text-muted: #666;
-    }
+  html { scroll-behavior: smooth; }
 
-    html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    font-size: 16px;
+    line-height: 1.6;
+  }
 
-    body {
-      font-family: 'Montserrat', sans-serif;
-      background: var(--white);
-      color: var(--black);
-      font-size: 16px;
-      line-height: 1.6;
-    }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 2.5rem;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #eee;
+  }
 
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.25rem 2.5rem;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid #eee;
-    }
+  .nav-logo {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--black);
+    text-decoration: none;
+  }
 
-    .nav-logo {
-      font-size: 22px;
-      font-weight: 600;
-      letter-spacing: -0.5px;
-      color: var(--black);
-      text-decoration: none;
-    }
+  .nav-logo span { color: var(--green); }
 
-    .nav-logo span { color: var(--green); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
 
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-    }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--black);
+    font-size: 14px;
+    font-weight: 500;
+  }
 
-    .nav-links a {
-      text-decoration: none;
-      color: var(--black);
-      font-size: 14px;
-      font-weight: 500;
-    }
+  .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+  }
 
-    .btn {
-      display: inline-block;
-      padding: 10px 22px;
-      border-radius: 100px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-      font-family: 'Montserrat', sans-serif;
-    }
+  .btn-primary { background: var(--black); color: var(--white) !important; }
+  .btn-primary:hover { opacity: 0.8; }
+  .btn-coral { background: var(--coral); color: var(--white); }
+  .btn-coral:hover { opacity: 0.85; }
+  .btn-outline { background: transparent; color: var(--black); border: 1.5px solid var(--black); }
+  .btn-outline:hover { background: var(--black); color: var(--white); }
 
-    .btn-primary {
-      background: var(--black);
-      color: var(--white) !important;
-    }
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
 
-    .btn-primary:hover { opacity: 0.8; }
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 80px);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    max-width: 800px;
+    margin-bottom: 1.5rem;
+  }
 
-    .btn-coral {
-      background: var(--coral);
-      color: var(--white);
-    }
+  .hero h1 em { font-style: normal; color: var(--coral); }
 
-    .btn-coral:hover { opacity: 0.85; }
+  .hero p {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    line-height: 1.7;
+  }
 
-    .btn-outline {
-      background: transparent;
-      color: var(--black);
-      border: 1.5px solid var(--black);
-    }
+  .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 
-    .btn-outline:hover { background: var(--black); color: var(--white); }
+  .hero-visual {
+    margin-top: 5rem;
+    width: 100%;
+    max-width: 760px;
+    background: var(--black);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: left;
+  }
 
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 8rem 2rem 4rem;
-      background: var(--white);
-      position: relative;
-      overflow: hidden;
-    }
+  .hero-visual-bar { display: flex; gap: 6px; margin-bottom: 1.5rem; }
 
-    .hero-badge {
-      display: inline-block;
-      background: var(--green);
-      color: var(--black);
-      font-size: 12px;
-      font-weight: 600;
-      padding: 5px 14px;
-      border-radius: 100px;
-      margin-bottom: 1.5rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: #444; }
+  .dot.red { background: #ff5f57; }
+  .dot.yellow { background: #febc2e; }
+  .dot.green { background: #28c840; }
 
-    .hero h1 {
-      font-size: clamp(40px, 7vw, 80px);
-      font-weight: 600;
-      line-height: 1.05;
-      letter-spacing: -2px;
-      max-width: 800px;
-      margin-bottom: 1.5rem;
-    }
+  .hero-input-row { display: flex; gap: 10px; margin-bottom: 1rem; }
 
-    .hero h1 em {
-      font-style: normal;
-      color: var(--coral);
-    }
+  .mock-input {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #ccc;
+    font-size: 13px;
+    font-family: 'Montserrat', sans-serif;
+  }
 
-    .hero p {
-      font-size: 18px;
-      color: var(--text-muted);
-      max-width: 480px;
-      margin-bottom: 2.5rem;
-      line-height: 1.7;
-    }
+  .mock-btn {
+    background: var(--green);
+    color: var(--black);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+  }
 
-    .hero-btns {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+  .mock-result { background: #1a1a1a; border-radius: 8px; padding: 1rem; margin-top: 8px; }
 
-    .hero-visual {
-      margin-top: 5rem;
-      width: 100%;
-      max-width: 760px;
-      background: var(--black);
-      border-radius: 16px;
-      padding: 2rem;
-      text-align: left;
-    }
+  .mock-tag {
+    display: inline-block;
+    background: #2a2a2a;
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
-    .hero-visual-bar {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 1.5rem;
-    }
+  .mock-text { color: #aaa; font-size: 13px; line-height: 1.6; }
+  .mock-text strong { color: var(--white); }
 
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #444;
-    }
+  .stats {
+    background: var(--black);
+    color: var(--white);
+    padding: 4rem 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+    text-align: center;
+  }
 
-    .dot.red { background: #ff5f57; }
-    .dot.yellow { background: #febc2e; }
-    .dot.green { background: #28c840; }
+  .stat-number { font-size: 48px; font-weight: 600; color: var(--green); line-height: 1; margin-bottom: 6px; }
+  .stat-label { font-size: 14px; color: #888; }
 
-    .hero-input-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 1rem;
-    }
+  .how { padding: 6rem 2rem; max-width: 1000px; margin: 0 auto; }
 
-    .mock-input {
-      flex: 1;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 10px 14px;
-      color: #ccc;
-      font-size: 13px;
-      font-family: 'Montserrat', sans-serif;
-    }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--coral);
+    margin-bottom: 1rem;
+  }
 
-    .mock-btn {
-      background: var(--green);
-      color: var(--black);
-      border: none;
-      border-radius: 8px;
-      padding: 10px 18px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: 'Montserrat', sans-serif;
-      white-space: nowrap;
-    }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 600;
+    letter-spacing: -1px;
+    margin-bottom: 3rem;
+    max-width: 500px;
+    line-height: 1.15;
+  }
 
-    .mock-result {
-      background: #1a1a1a;
-      border-radius: 8px;
-      padding: 1rem;
-      margin-top: 8px;
-    }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 
-    .mock-tag {
-      display: inline-block;
-      background: #2a2a2a;
-      color: var(--green);
-      font-size: 10px;
-      font-weight: 600;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+  .step { padding: 2rem; border-radius: 12px; border: 1px solid #eee; transition: border-color 0.2s; }
+  .step:hover { border-color: var(--green); }
 
-    .mock-text { color: #aaa; font-size: 13px; line-height: 1.6; }
-    .mock-text strong { color: var(--white); }
+  .step-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 1rem;
+  }
 
-    /* STATS */
-    .stats {
-      background: var(--black);
-      color: var(--white);
-      padding: 4rem 2rem;
-      display: flex;
-      justify-content: center;
-      gap: 4rem;
-      flex-wrap: wrap;
-      text-align: center;
-    }
+  .step h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .step p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
-    .stat-number {
-      font-size: 48px;
-      font-weight: 600;
-      color: var(--green);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
+  .features { background: var(--gray); padding: 6rem 2rem; }
+  .features-inner { max-width: 1000px; margin: 0 auto; }
 
-    .stat-label { font-size: 14px; color: #888; }
+  .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 3rem; }
 
-    /* HOW */
-    .how {
-      padding: 6rem 2rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
+  .feature-card { background: var(--white); border-radius: 12px; padding: 1.75rem; }
+  .feature-icon { font-size: 28px; margin-bottom: 12px; }
+  .feature-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
-    .section-label {
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--coral);
-      margin-bottom: 1rem;
-    }
+  .pricing { padding: 6rem 2rem; max-width: 800px; margin: 0 auto; text-align: center; }
 
-    .section-title {
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 600;
-      letter-spacing: -1px;
-      margin-bottom: 3rem;
-      max-width: 500px;
-      line-height: 1.15;
-    }
+  .pricing-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3rem; text-align: left; }
 
-    .steps {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
+  .pricing-card { border: 1.5px solid #eee; border-radius: 16px; padding: 2rem; }
 
-    .step {
-      padding: 2rem;
-      border-radius: 12px;
-      border: 1px solid #eee;
-      transition: border-color 0.2s;
-    }
+  .pricing-card.popular { border-color: var(--black); background: var(--black); color: var(--white); }
 
-    .step:hover { border-color: var(--green); }
+  .pricing-badge {
+    display: inline-block;
+    background: var(--green);
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
-    .step-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      background: var(--green);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      margin-bottom: 1rem;
-    }
+  .pricing-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .pricing-price { font-size: 40px; font-weight: 600; letter-spacing: -1px; margin: 1rem 0 0.25rem; }
+  .pricing-price span { font-size: 16px; font-weight: 400; }
+  .pricing-desc { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
+  .pricing-card.popular .pricing-desc { color: #aaa; }
 
-    .step h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-    .step p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+  .pricing-features { list-style: none; margin-bottom: 2rem; }
+  .pricing-features li { font-size: 14px; padding: 6px 0; display: flex; align-items: center; gap: 8px; color: #444; }
+  .pricing-card.popular .pricing-features li { color: #ccc; }
+  .pricing-features li::before { content: "✓"; font-weight: 700; color: var(--green); }
 
-    /* FEATURES */
-    .features {
-      background: var(--gray);
-      padding: 6rem 2rem;
-    }
+  .cta { background: var(--coral); padding: 6rem 2rem; text-align: center; }
+  .cta h2 { font-size: clamp(28px, 4vw, 48px); font-weight: 600; letter-spacing: -1px; color: var(--white); margin-bottom: 1rem; }
+  .cta p { color: rgba(255,255,255,0.8); margin-bottom: 2rem; font-size: 16px; }
 
-    .features-inner {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
+  footer { background: var(--black); color: #666; text-align: center; padding: 2rem; font-size: 13px; }
+  footer a { color: var(--green); text-decoration: none; }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .feature-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 1.75rem;
-    }
-
-    .feature-icon { font-size: 28px; margin-bottom: 12px; }
-    .feature-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-    .feature-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
-
-    /* PRICING */
-    .pricing {
-      padding: 6rem 2rem;
-      max-width: 800px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .pricing-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 3rem;
-      text-align: left;
-    }
-
-    .pricing-card {
-      border: 1.5px solid #eee;
-      border-radius: 16px;
-      padding: 2rem;
-    }
-
-    .pricing-card.popular {
-      border-color: var(--black);
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .pricing-badge {
-      display: inline-block;
-      background: var(--green);
-      color: var(--black);
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 100px;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .pricing-name { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-    .pricing-price { font-size: 40px; font-weight: 600; letter-spacing: -1px; margin: 1rem 0 0.25rem; }
-    .pricing-price span { font-size: 16px; font-weight: 400; }
-    .pricing-desc { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
-    .pricing-card.popular .pricing-desc { color: #aaa; }
-
-    .pricing-features { list-style: none; margin-bottom: 2rem; }
-    .pricing-features li {
-      font-size: 14px;
-      padding: 6px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #444;
-    }
-    .pricing-card.popular .pricing-features li { color: #ccc; }
-    .pricing-features li::before { content: "✓"; font-weight: 700; color: var(--green); }
-
-    /* CTA */
-    .cta {
-      background: var(--coral);
-      padding: 6rem 2rem;
-      text-align: center;
-    }
-
-    .cta h2 {
-      font-size: clamp(28px, 4vw, 48px);
-      font-weight: 600;
-      letter-spacing: -1px;
-      color: var(--white);
-      margin-bottom: 1rem;
-    }
-
-    .cta p { color: rgba(255,255,255,0.8); margin-bottom: 2rem; font-size: 16px; }
-
-    .btn-white {
-      background: var(--white);
-      color: var(--coral);
-      font-weight: 700;
-    }
-
-    .btn-white:hover { opacity: 0.9; }
-
-    /* FOOTER */
-    footer {
-      background: var(--black);
-      color: #666;
-      text-align: center;
-      padding: 2rem;
-      font-size: 13px;
-    }
-
-    footer a { color: var(--green); text-decoration: none; }
-
-    /* RESPONSIVE */
-    @media (max-width: 700px) {
-      nav { padding: 1rem 1.25rem; }
-      .nav-links { gap: 1rem; }
-      .steps { grid-template-columns: 1fr; }
-      .features-grid { grid-template-columns: 1fr; }
-      .pricing-cards { grid-template-columns: 1fr; }
-      .stats { gap: 2rem; }
-    }
-  </style>
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { gap: 1rem; }
+    .steps { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .pricing-cards { grid-template-columns: 1fr; }
+    .stats { gap: 2rem; }
+  }
+</style>
 </head>
 <body>
 
@@ -493,7 +327,6 @@
     <a href="/login.html" class="btn btn-primary">Essayer gratuitement</a>
     <a href="#how" class="btn btn-outline">Voir comment ça marche</a>
   </div>
-
   <div class="hero-visual">
     <div class="hero-visual-bar">
       <div class="dot red"></div>
@@ -506,11 +339,11 @@
     </div>
     <div class="mock-result">
       <div class="mock-tag">Fiche produit · FR</div>
-      <p class="mock-text"><strong>Légèreté sans compromis.</strong> Conçues pour les coureurs qui refusent de choisir entre performance et confort, ces chaussures redéfinissent votre foulée. Semelle réactive, maintien précis, design épuré.</p>
+      <p class="mock-text"><strong>Légèreté sans compromis.</strong> Conçues pour les coureurs qui refusent de choisir entre performance et confort, ces chaussures redéfinissent votre foulée.</p>
     </div>
     <div class="mock-result" style="margin-top: 8px;">
       <div class="mock-tag">Post Instagram · DE</div>
-      <p class="mock-text"><strong>Laufen neu erleben 🏃</strong> Leicht. Schnell. Unaufhaltbar. Unsere neuen Running-Schuhe sind da — und sie werden alles verändern. #Running #Sport #Performance</p>
+      <p class="mock-text"><strong>Laufen neu erleben 🏃</strong> Leicht. Schnell. Unaufhaltbar. #Running #Sport #Performance</p>
     </div>
   </div>
 </section>
@@ -595,7 +428,7 @@
       <div class="pricing-price">0€ <span>/ mois</span></div>
       <div class="pricing-desc">Pour découvrir noa.</div>
       <ul class="pricing-features">
-        <li>5 générations par mois</li>
+        <li>10 générations par mois</li>
         <li>Fiche produit</li>
         <li>2 langues</li>
         <li>Accès à l'outil</li>
@@ -605,7 +438,7 @@
     <div class="pricing-card popular">
       <div class="pricing-badge">✦ Populaire</div>
       <div class="pricing-name">Pro</div>
-      <div class="pricing-price">49€ <span>/ mois</span></div>
+      <div class="pricing-price">29€ <span>/ mois</span></div>
       <div class="pricing-desc">Pour les équipes qui produisent du contenu en masse.</div>
       <ul class="pricing-features">
         <li>Générations illimitées</li>
@@ -613,7 +446,7 @@
         <li>4 langues</li>
         <li>Support prioritaire</li>
       </ul>
-      <a href="/login.html" class="btn btn-coral" style="width:100%; text-align:center;">Choisir Pro</a>
+      <a href="https://buy.stripe.com/test_00wcN45iF3r2d1b9zq8IU00" class="btn btn-coral" style="width:100%; text-align:center;">Choisir Pro</a>
     </div>
   </div>
 </section>
@@ -631,5 +464,10 @@
   <p style="margin-top: 8px; font-size: 12px; color: #444;">Créé par Mathilde GAZEZIAN</p>
 </footer>
 
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
 </body>
 </html>

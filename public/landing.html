@@ -415,6 +415,16 @@
     <a href="/login.html" class="btn btn-primary">Essayer gratuitement</a>
     <a href="#how" class="btn btn-outline">Voir comment ça marche</a>
   </div>
+
+  <div id="install-wrap" style="margin-top: 1rem; display: none;">
+    <button onclick="installApp()" style="display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1.5px solid #ddd; border-radius: 100px; padding: 8px 20px; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; font-family: 'Montserrat', sans-serif; transition: all 0.2s;">
+      📱 Installer l'appli
+    </button>
+  </div>
+
+  <div id="ios-hint" style="margin-top: 1rem; display: none; font-size: 12px; color: #999; text-align: center;">
+    📱 Sur iPhone : appuyez sur <strong>共</strong> puis <strong>"Sur l'écran d'accueil"</strong>
+  </div>
   <div class="hero-visual">
     <div class="hero-visual-bar">
       <div class="dot red"></div>
@@ -557,12 +567,12 @@
     navigator.serviceWorker.register('/sw.js');
   }
 
-  // ─── ANDROID INSTALL BUTTON ───
+  // ─── ANDROID INSTALL ───
   let deferredPrompt;
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    document.getElementById('android-install').style.display = 'flex';
+    document.getElementById('install-wrap').style.display = 'block';
   });
 
   function installApp() {
@@ -570,16 +580,16 @@
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then(() => {
         deferredPrompt = null;
-        document.getElementById('android-install').style.display = 'none';
+        document.getElementById('install-wrap').style.display = 'none';
       });
     }
   }
 
-  // ─── IOS BANNER ───
+  // ─── IOS HINT ───
   const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
-  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
-  if (isIos && !isInStandaloneMode) {
-    document.getElementById('ios-banner').style.display = 'flex';
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+  if (isIos && !isStandalone) {
+    document.getElementById('ios-hint').style.display = 'block';
   }
 </script>
 </body>

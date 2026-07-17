@@ -297,6 +297,69 @@
   footer { background: var(--black); color: #666; text-align: center; padding: 2rem; font-size: 13px; }
   footer a { color: var(--green); text-decoration: none; }
 
+  /* ─── INSTALL BANNERS ─── */
+  .install-banner {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 2rem;
+    background: var(--black);
+    color: var(--white);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .install-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .install-banner-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--green);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--black);
+    flex-shrink: 0;
+  }
+
+  .install-banner-text { line-height: 1.4; }
+  .install-banner-text small { font-size: 11px; color: rgba(255,255,255,0.5); display: block; }
+
+  .install-btn {
+    background: var(--green);
+    color: var(--black);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+
+  .install-btn:hover { opacity: 0.85; }
+
+  .install-close {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+
   @media (max-width: 700px) {
     nav { padding: 1rem 1.25rem; }
     .nav-links { gap: 1rem; }
@@ -308,6 +371,31 @@
 </style>
 </head>
 <body>
+
+<!-- ANDROID INSTALL BANNER -->
+<div class="install-banner" id="android-install">
+  <div class="install-banner-left">
+    <div class="install-banner-icon">n.</div>
+    <div class="install-banner-text">
+      Installez noa. sur votre téléphone
+      <small>Accès rapide depuis votre écran d'accueil</small>
+    </div>
+  </div>
+  <button class="install-btn" onclick="installApp()">Installer</button>
+  <button class="install-close" onclick="this.parentElement.style.display='none'">✕</button>
+</div>
+
+<!-- IOS INSTALL BANNER -->
+<div class="install-banner" id="ios-banner">
+  <div class="install-banner-left">
+    <div class="install-banner-icon">n.</div>
+    <div class="install-banner-text">
+      Installez noa. sur votre iPhone
+      <small>Appuyez sur 共 puis "Sur l'écran d'accueil"</small>
+    </div>
+  </div>
+  <button class="install-close" onclick="this.parentElement.style.display='none'">✕</button>
+</div>
 
 <!-- NAV -->
 <nav>
@@ -467,6 +555,31 @@
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js');
+  }
+
+  // ─── ANDROID INSTALL BUTTON ───
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('android-install').style.display = 'flex';
+  });
+
+  function installApp() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        document.getElementById('android-install').style.display = 'none';
+      });
+    }
+  }
+
+  // ─── IOS BANNER ───
+  const isIos = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase());
+  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches;
+  if (isIos && !isInStandaloneMode) {
+    document.getElementById('ios-banner').style.display = 'flex';
   }
 </script>
 </body>

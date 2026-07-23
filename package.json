@@ -1,6 +1,9 @@
 {
   "name": "generateur-produit",
   "version": "1.0.0",
+  "engines": {
+  "node": ">=22.0.0"
+},
   "description": "Générateur de contenu produit IA",
   "main": "server.js",
   "scripts": {

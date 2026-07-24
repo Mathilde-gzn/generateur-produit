@@ -302,6 +302,22 @@
   .submit-btn:active { transform: translateY(0); }
   .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
 
+  .forgot-link {
+    display: block;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 0;
+    margin: 8px 2px 0 0;
+    transition: color 0.15s;
+  }
+  .forgot-link:hover { color: var(--black); }
+
   .free-badge {
     display: flex;
     align-items: center;
@@ -417,6 +433,8 @@
       <input class="input-field" type="password" id="password" placeholder="••••••••" />
     </div>
 
+    <button class="forgot-link" id="forgot-link" onclick="handleForgot()">Mot de passe oublié ?</button>
+
     <button class="submit-btn" id="submit-btn" onclick="handleSubmit()">Se connecter →</button>
 
     <div class="free-badge">
@@ -446,6 +464,7 @@
       ? 'Commencez avec 10 générations gratuites.'
       : 'Connectez-vous pour accéder à votre générateur.';
     document.getElementById('submit-btn').textContent = signup ? "S'inscrire →" : "Se connecter →";
+    document.getElementById('forgot-link').style.display = signup ? 'none' : 'block';
     document.getElementById('msg').className = 'msg';
   }
 
@@ -477,6 +496,26 @@
     } finally {
       btn.disabled = false;
       btn.textContent = isSignup ? "S'inscrire →" : "Se connecter →";
+    }
+  }
+
+  async function handleForgot() {
+    const email = document.getElementById('email').value.trim();
+    if (!email) { showMsg('error', 'Entre ton email ci-dessus, puis reclique sur « Mot de passe oublié ? ».'); return; }
+    const link = document.getElementById('forgot-link');
+    link.disabled = true;
+    link.textContent = 'Envoi...';
+    try {
+      const { error } = await sbClient.auth.resetPasswordForEmail(email, {
+        redirectTo: window.location.origin + '/reset.html'
+      });
+      if (error) throw error;
+      showMsg('success', '✓ Si un compte existe pour ' + email + ', un email de réinitialisation vient d\'être envoyé.');
+    } catch(e) {
+      showMsg('error', e.message || 'Une erreur est survenue.');
+    } finally {
+      link.disabled = false;
+      link.textContent = 'Mot de passe oublié ?';
     }
   }
 

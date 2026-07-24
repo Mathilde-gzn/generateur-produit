@@ -3,7 +3,7 @@
 // Le cache ne sert que de secours hors connexion. Aucune requête API n'est touchée.
 
 const CACHE = 'noa-v5';
-const PAGES = ['/landing.html', '/login.html', '/index.html'];
+const PAGES = ['/landing.html', '/login.html', '/index.html', '/reset.html'];
 
 // Routes à ne JAMAIS mettre en cache (API, auth, paiement)
 const NO_CACHE = ['/generate', '/me', '/signup', '/webhook', '/stripe'];

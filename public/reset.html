@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>noa. — Nouveau mot de passe</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23ffffff'/><text y='.9em' font-size='70' x='10' fill='%23A9F6A7' font-family='sans-serif' font-weight='bold'>n.</text></svg>">
+<meta name="theme-color" content="#A9F6A7" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --green: #A9F6A7;
+    --green-dark: #7de87a;
+    --coral: #F88A5F;
+    --white: #ffffff;
+    --bg: #f7f7f5;
+    --border: #e8e8e6;
+    --muted: #999;
+    --text: #1a1a18;
+  }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--white);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .deco { position: absolute; border-radius: 50%; pointer-events: none; }
+  .deco-1 { width: 320px; height: 320px; background: var(--green); opacity: 0.25; top: -140px; right: -120px; }
+  .deco-2 { width: 220px; height: 220px; background: var(--coral); opacity: 0.18; bottom: -90px; left: -70px; }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -14px; left: 0; right: 0;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--green), var(--coral));
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 1px;
+    text-decoration: none;
+    margin-bottom: 2rem;
+  }
+  .logo-text { font-size: 24px; font-weight: 700; color: var(--black); letter-spacing: -1px; line-height: 1; }
+  .logo-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; margin-bottom: 2px; flex-shrink: 0; }
+
+  .title { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; margin-bottom: 5px; }
+  .sub { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 1.75rem; }
+
+  .input-group { margin-bottom: 12px; }
+  .input-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin-bottom: 6px; display: block;
+  }
+  .input-field {
+    width: 100%; font-size: 14px; font-weight: 500; padding: 11px 16px;
+    border: 1.5px solid var(--border); border-radius: 10px; outline: none;
+    background: var(--bg); color: var(--text); font-family: inherit; transition: all 0.2s;
+  }
+  .input-field::placeholder { color: #ccc; font-weight: 400; }
+  .input-field:focus { border-color: var(--black); background: var(--white); box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+
+  .submit-btn {
+    width: 100%; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 10px;
+    border: none; background: var(--black); color: var(--white); cursor: pointer;
+    font-family: inherit; transition: all 0.2s; letter-spacing: 0.03em; margin-top: 8px;
+  }
+  .submit-btn:hover { background: #222; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .msg {
+    padding: 10px 14px; border-radius: 8px; font-size: 12px; font-weight: 500;
+    margin-bottom: 12px; display: none; line-height: 1.5;
+  }
+  .msg.error { background: #fef2f2; border: 1px solid #fecaca; color: #c0392b; display: block; }
+  .msg.success { background: #e8fde8; border: 1px solid #b8f5b6; color: #1a7a1a; display: block; }
+
+  .back { display: inline-block; margin-top: 1.5rem; font-size: 11px; color: #ccc; text-decoration: none; transition: color 0.15s; }
+  .back:hover { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="deco deco-1"></div>
+<div class="deco deco-2"></div>
+
+<div class="card">
+  <a class="logo" href="/landing.html">
+    <span class="logo-text">noa</span>
+    <div class="logo-dot"></div>
+  </a>
+
+  <h1 class="title">Nouveau mot de passe</h1>
+  <p class="sub" id="sub">Choisissez un nouveau mot de passe pour votre compte.</p>
+
+  <div class="msg" id="msg"></div>
+
+  <div id="form">
+    <div class="input-group">
+      <label class="input-label">Nouveau mot de passe</label>
+      <input class="input-field" type="password" id="password" placeholder="••••••••" />
+    </div>
+    <div class="input-group">
+      <label class="input-label">Confirmer le mot de passe</label>
+      <input class="input-field" type="password" id="password2" placeholder="••••••••" />
+    </div>
+    <button class="submit-btn" id="submit-btn" onclick="handleReset()">Enregistrer →</button>
+  </div>
+
+  <a class="back" href="/login.html">← Retour à la connexion</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://tpyosrakpsohskvmyquo.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRweW9zcmFrcHNvaHNrdm15cXVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4MTI1MzEsImV4cCI6MjA5ODM4ODUzMX0.U9C2BxjwIP5W0mHBLAX4E6daMaq8mVLQvGDUQuD049w";
+  const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Quand l'utilisateur arrive depuis le lien de l'email, Supabase ouvre
+  // une session de récupération. Si ce n'est pas le cas, le lien est invalide/expiré.
+  let canReset = false;
+  sbClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY' || session) canReset = true;
+  });
+
+  // Filet de sécurité : si aucune session au bout de 1,5s, on prévient.
+  setTimeout(async () => {
+    const { data: { session } } = await sbClient.auth.getSession();
+    if (!session && !canReset) {
+      showMsg('error', 'Ce lien est invalide ou a expiré. Redemandez un email depuis la page de connexion.');
+      document.getElementById('form').style.display = 'none';
+    }
+  }, 1500);
+
+  async function handleReset() {
+    const p1 = document.getElementById('password').value;
+    const p2 = document.getElementById('password2').value;
+    const btn = document.getElementById('submit-btn');
+
+    if (!p1 || !p2) { showMsg('error', 'Remplis les deux champs.'); return; }
+    if (p1.length < 6) { showMsg('error', 'Le mot de passe doit faire au moins 6 caractères.'); return; }
+    if (p1 !== p2) { showMsg('error', 'Les deux mots de passe ne correspondent pas.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Enregistrement...';
+    try {
+      const { error } = await sbClient.auth.updateUser({ password: p1 });
+      if (error) throw error;
+      showMsg('success', '✓ Mot de passe mis à jour ! Redirection vers la connexion...');
+      document.getElementById('form').style.display = 'none';
+      setTimeout(() => { window.location.href = '/login.html'; }, 2000);
+    } catch(e) {
+      showMsg('error', e.message || 'Une erreur est survenue.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enregistrer →';
+    }
+  }
+
+  function showMsg(type, text) {
+    const el = document.getElementById('msg');
+    el.className = 'msg ' + type;
+    el.textContent = text;
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') handleReset(); });
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
+
+</body>
+</html>

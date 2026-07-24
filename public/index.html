@@ -1002,5 +1002,12 @@
     if (e.key === 'Enter') generate();
   });
 </script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
+
 </body>
 </html>

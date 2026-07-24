@@ -26,7 +26,10 @@
     --text: #1a1a18;
   }
 
+
   html, body { height: 100%; }
+
+
 
   body {
     font-family: 'Montserrat', sans-serif;
@@ -384,7 +387,7 @@
   </div>
 
   <div class="left-bottom">
-    <p>© 2025 noa. — Créé par Mathilde GAZEZIAN</p>
+    <p>© 2026 noa. — Créé par Mathilde Gazezian — Design par Céline Blanc</p>
   </div>
 </div>
 
@@ -491,5 +494,12 @@
     if (e.key === 'Enter') handleSubmit();
   });
 </script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+</script>
+
 </body>
 </html>
